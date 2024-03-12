@@ -7,14 +7,14 @@
     </CustomSourceDirectories>
     <AutoProgramSPIFFSPartition>true</AutoProgramSPIFFSPartition>
     <KernelDebugHost>
-      <HostName>Ubuntu 22</HostName>
+      <HostName>Debian 11</HostName>
       <Transport>ManagedVM</Transport>
       <UserName>VMWare</UserName>
     </KernelDebugHost>
     <MainSourceTransferCommand>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
       <RemoteHost>
-        <HostName>Ubuntu 22</HostName>
+        <HostName>Debian 11</HostName>
         <Transport>ManagedVM</Transport>
         <UserName>VMWare</UserName>
       </RemoteHost>
@@ -34,13 +34,18 @@
       </FileMasks>
       <TransferNewFilesOnly>true</TransferNewFilesOnly>
       <IncludeSubdirectories>true</IncludeSubdirectories>
-      <DeleteDisappearedFiles>false</DeleteDisappearedFiles>
+      <DeleteDisappearedFiles>true</DeleteDisappearedFiles>
       <ApplyGlobalExclusionList>true</ApplyGlobalExclusionList>
+      <Extension>
+        <Direction>Outgoing</Direction>
+        <SkipMountPoints>false</SkipMountPoints>
+        <OverwriteTrigger>LocalCache</OverwriteTrigger>
+      </Extension>
     </MainSourceTransferCommand>
     <SkipBuildIfNoSourceFilesChanged>false</SkipBuildIfNoSourceFilesChanged>
     <IgnoreFileTransferErrors>false</IgnoreFileTransferErrors>
     <ProjectModeSettings>
-      <ProjectGUID>1465978b-6f9a-4cf7-b707-f09c6f5b0d5b</ProjectGUID>
+      <ProjectGUID>2c26e2ca-0048-4ea6-bb58-216341c8125f</ProjectGUID>
       <GroupSourcesByTypes>true</GroupSourcesByTypes>
       <GroupSourcesByPaths>true</GroupSourcesByPaths>
       <GroupModulesByPaths>true</GroupModulesByPaths>
@@ -57,8 +62,8 @@
     </MakeCommandTemplate>
     <IntelliSenseMode>Ask</IntelliSenseMode>
     <KernelVersion>
-      <Release>5.15.0-100-generic</Release>
-      <Version>#110-Ubuntu SMP Wed Feb 7 13:27:48 UTC 2024</Version>
+      <Release>5.10.0-28-amd64</Release>
+      <Version>#1 SMP Debian 5.10.209-2 (2024-01-31)</Version>
     </KernelVersion>
   </Build>
   <CustomBuild>
@@ -79,6 +84,7 @@
     <ShowMessageAfterExecuting>true</ShowMessageAfterExecuting>
   </CustomShortcuts>
   <UserDefinedVariables />
+  <ImportedPropertySheets />
   <CodeSense>
     <Enabled>Unknown</Enabled>
     <ExtraSettings>
@@ -91,6 +97,8 @@
       <Enabled>false</Enabled>
     </CodeAnalyzerSettings>
   </CodeSense>
+  <Configurations />
+  <ProgramArgumentsSuggestions />
   <Debug xsi:type="com.visualgdb.debug.linux.kernel">
     <AdditionalStartupCommands />
     <AdditionalGDBSettings>
@@ -131,7 +139,7 @@
     <RunGDBWithSUDO>false</RunGDBWithSUDO>
     <DeploymentDirectory>/tmp</DeploymentDirectory>
     <KernelConnection xsi:type="com.visualgdb.debug.linux.kernel.connection.vm">
-      <VMFile>Ubuntu 22</VMFile>
+      <VMFile>Debian 11</VMFile>
       <Bitness>AutoDetet</Bitness>
       <Type>VMWare</Type>
     </KernelConnection>

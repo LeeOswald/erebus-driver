@@ -2,7 +2,7 @@
 #Use VisualKernel Project Properties to edit.
 
 KERNEL_MODULE_NAME := erebuskm
-KERNEL_MODULE_OBJECT_FILE_LIST := main.o
+KERNEL_MODULE_OBJECT_FILE_LIST := erebuskm_main.o erebuskm.o util.o
 
 obj-m := $(KERNEL_MODULE_NAME).o
 $(KERNEL_MODULE_NAME)-y += $(KERNEL_MODULE_OBJECT_FILE_LIST)

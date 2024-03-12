@@ -3,61 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{A3061986-218F-483F-A495-4FD7C6A4062B}") = "erebuskm", "erebuskm.vkrnlproj", "{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}"
+Project("{A3061986-218F-483F-A495-4FD7C6A4062B}") = "erebuskm", "erebuskm.vkrnlproj", "{2C26E2CA-0048-4EA6-BB58-216341C8125F}"
 EndProject
-Project("{A3061986-218F-483F-A495-4FD7C6A4062B}") = "KernelRelease", "S:\_LINUX_SYMBOLS_\5.15.0-100-generic_0.kernel\KernelRelease.vkrnlrelease", "{701C7043-5465-470D-94D3-B97FBB2A99D8}"
+Project("{A3061986-218F-483F-A495-4FD7C6A4062B}") = "KernelRelease", "S:\_LINUX_SYMBOLS_\5.10.0-28-amd64_0.kernel\KernelRelease.vkrnlrelease", "{94513871-39F4-41FC-83D8-3C881467E192}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6F3336BA-5B56-4466-8FDC-7377CA083334}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|VisualKernel = Debug|VisualKernel
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
 		Default|VisualKernel = Default|VisualKernel
-		Default|x64 = Default|x64
-		Default|x86 = Default|x86
-		Release|VisualKernel = Release|VisualKernel
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Debug|VisualKernel.ActiveCfg = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Debug|VisualKernel.Build.0 = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Debug|x64.ActiveCfg = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Debug|x64.Build.0 = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Debug|x86.ActiveCfg = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Debug|x86.Build.0 = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Default|VisualKernel.ActiveCfg = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Default|VisualKernel.Build.0 = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Default|x64.ActiveCfg = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Default|x64.Build.0 = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Default|x86.ActiveCfg = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Default|x86.Build.0 = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Release|VisualKernel.ActiveCfg = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Release|VisualKernel.Build.0 = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Release|x64.ActiveCfg = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Release|x64.Build.0 = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Release|x86.ActiveCfg = Default|VisualKernel
-		{1465978B-6F9A-4CF7-B707-F09C6F5B0D5B}.Release|x86.Build.0 = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Debug|VisualKernel.ActiveCfg = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Debug|VisualKernel.Build.0 = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Debug|x64.ActiveCfg = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Debug|x64.Build.0 = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Debug|x86.ActiveCfg = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Debug|x86.Build.0 = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Default|VisualKernel.ActiveCfg = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Default|VisualKernel.Build.0 = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Default|x64.ActiveCfg = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Default|x64.Build.0 = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Default|x86.ActiveCfg = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Default|x86.Build.0 = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Release|VisualKernel.ActiveCfg = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Release|VisualKernel.Build.0 = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Release|x64.ActiveCfg = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Release|x64.Build.0 = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Release|x86.ActiveCfg = Default|VisualKernel
-		{701C7043-5465-470D-94D3-B97FBB2A99D8}.Release|x86.Build.0 = Default|VisualKernel
+		{2C26E2CA-0048-4EA6-BB58-216341C8125F}.Default|VisualKernel.ActiveCfg = Default|VisualKernel
+		{2C26E2CA-0048-4EA6-BB58-216341C8125F}.Default|VisualKernel.Build.0 = Default|VisualKernel
+		{94513871-39F4-41FC-83D8-3C881467E192}.Default|VisualKernel.ActiveCfg = Default|VisualKernel
+		{94513871-39F4-41FC-83D8-3C881467E192}.Default|VisualKernel.Build.0 = Default|VisualKernel
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B7B8789E-DD32-4AD8-8B21-B0DA76BF5DAC}
 	EndGlobalSection
 EndGlobal
