@@ -15,8 +15,8 @@
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
       <RemoteHost>
         <HostName>192.168.190.134</HostName>
-        <Transport>ManagedVM</Transport>
-        <UserName>VMWare</UserName>
+        <Transport>SSH</Transport>
+        <UserName>ursus</UserName>
       </RemoteHost>
       <LocalDirectory>$(ProjectDir)</LocalDirectory>
       <RemoteDirectory>/tmp/VisualKernel/$(ProjectDirUnixStyle)</RemoteDirectory>

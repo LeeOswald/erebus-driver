@@ -1,10 +1,13 @@
 #include "erebuskm.h"
 #include "shared.h"
 
+#include <linux/cdev.h>
+#include <linux/device.h>
 #include <linux/fs.h>
 #include <linux/init.h>
 #include <linux/kernel.h>
 #include <linux/module.h>
+#include <linux/slab.h>
 
 #include <linux/sched/cputime.h>
 #include <linux/sched/signal.h>
@@ -19,6 +22,18 @@
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Lee Oswald");
 
+struct er_device_t {
+	dev_t dev;
+	struct cdev cdev;
+	wait_queue_head_t read_queue;
+};
+
+
+struct er_client_t {
+	struct list_head node;
+	struct task_struct *client_thread;
+};
+
 static int erebuskm_open(struct inode *inode, struct file *filp);
 static int erebuskm_release(struct inode *inode, struct file *filp);
 static long erebuskm_ioctl(struct file *f, unsigned int cmd, unsigned long arg);
@@ -32,6 +47,11 @@ static const struct file_operations g_erebuskm_fops = {
 };
 
 static int g_major = -1;
+static struct class *g_class = NULL;
+static unsigned g_numdevs = 0;
+static unsigned g_created_devices = 0;
+static struct er_device_t *g_devs = NULL;
+
 LIST_HEAD(g_client_list);
 static DEFINE_MUTEX(g_client_mutex);
 
@@ -190,6 +210,7 @@ static long erebuskm_ioctl(struct file *filp, unsigned int cmd, unsigned long ar
 		if (count >= process_list->limit) {
 			er_verbose("ERK_IOCTL_GET_PROCESS_LIST: not enough space (%d avail, %d required)\n", (int)process_list->limit, (int)count);
 
+			// return expected entry count to client
 			if (copy_to_user((void *)arg, process_list, sizeof(struct erk_process_list))) {
 				ret = -EINVAL;
 				goto ioctl_cleanup_procinfo;
@@ -217,33 +238,127 @@ ioctl_cleanup:
 	return ret;
 }
 
+static char *erebuskm_devnode(struct device *dev, umode_t *mode)
+{
+	if (mode) {
+		*mode = 0400;
+
+		if (dev)
+			if (MINOR(dev->devt) == g_numdevs)
+				*mode = 0222;
+	}
+
+	return NULL;
+}
+
+static void global_cleanup(void)
+{
+	unsigned j = 0;
+	for (j = 0; j < g_created_devices; ++j) {
+		device_destroy(g_class, g_devs[j].dev);
+		cdev_del(&g_devs[j].cdev);
+	}
+
+	g_created_devices = 0;
+	
+	if (g_devs) {
+		kfree(g_devs);
+		g_devs = NULL;
+	}
+	
+	if (g_class) {
+		class_destroy(g_class);
+		g_class = NULL;
+	}
+
+	if (g_major >= 0) {
+		unregister_chrdev_region(MKDEV(g_major, 0), g_numdevs);
+		g_major = -1;
+	}
+}
 
 static int __init erebuskm_init(void)
 {
 	int ret = 0;
-
+	dev_t dev = 0;
+	unsigned j = 0;
+	unsigned cpus = cpu_count();
+	
 	er_verbose("Loading Erebus\n");
 	
-	g_major = register_chrdev(0, ERK_DEVICE_NAME, &g_erebuskm_fops);
-	if (g_major < 0) {
-		pr_err("Faied to register the device: %d", g_major);
-		ret = g_major;
+	ret = alloc_chrdev_region(&dev, 0, cpus, ERK_DEVICE_NAME);
+	if (ret < 0) {
+		pr_err("Could not allocate major number for %s: %d\n", ERK_DEVICE_NAME, ret);
+		goto exit_init;
+	}
+
+	g_class = class_create(THIS_MODULE, ERK_DEVICE_NAME);
+	if (IS_ERR(g_class)) {
+		pr_err("Failed to allocate the device class\n");
+		ret = -EFAULT;
 		goto cleanup_init;
 	}
 
+	g_class->devnode = erebuskm_devnode;
+	g_major = MAJOR(dev);
+	g_numdevs = cpus;
+
+	er_verbose("%d CPUs found\n", cpus);
+
+	g_devs = kmalloc(g_numdevs * sizeof(struct er_device_t), GFP_KERNEL);
+	if (!g_devs) {
+		pr_err("Failed to allocate devices\n");
+		ret = -ENOMEM;
+		goto cleanup_init;
+	}
+
+	for (j = 0; j < g_numdevs; ++j) {
+		struct device *device = NULL;
+		
+		cdev_init(&g_devs[j].cdev, &g_erebuskm_fops);
+		g_devs[j].dev = MKDEV(g_major, j);
+
+		device = device_create(
+			g_class,
+			NULL, /* no parent device */
+			g_devs[j].dev,
+			NULL, /* no additional data */
+			ERK_DEVICE_NAME "%d",
+			j
+		);
+
+		if(IS_ERR(device)) {
+			pr_err("Failed to create the device for  %s\n", ERK_DEVICE_NAME);
+			cdev_del(&g_devs[j].cdev) ;
+			ret = -EFAULT ;
+			goto cleanup_init;
+		}
+
+		if (cdev_add(&g_devs[j].cdev, g_devs[j].dev, 1) < 0) {
+			pr_err("Failed to allocate chrdev for %s\n", ERK_DEVICE_NAME);
+			ret = -EFAULT;
+			goto cleanup_init;
+		}
+
+		er_verbose("Created device %d:%d\n", g_major, j);
+
+		init_waitqueue_head(&g_devs[j].read_queue);
+		++g_created_devices;
+	}
+
+
 cleanup_init:
+	global_cleanup();
+	
+exit_init:
 	return ret;
 }
 
 static void __exit erebuskm_exit(void)
 {
 	er_verbose("Unloading Erebus\n");
-	
-	if (g_major >= 0) {
-		unregister_chrdev(g_major, ERK_DEVICE_NAME);
-		g_major = -1;
-	}
-	
+
+	global_cleanup();
 }
 
 module_init(erebuskm_init);
