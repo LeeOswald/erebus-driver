@@ -7,6 +7,7 @@
 #include <linux/module.h>
 
 #include <linux/sched/cputime.h>
+#include <linux/sched/signal.h>
 #include <linux/vmalloc.h>
 
 
