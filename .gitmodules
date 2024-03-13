@@ -1,0 +1,4 @@
+[submodule "submodules/erebus-server"]
+	path = submodules/erebus-server
+	url = https://github.com/LeeOswald/erebus-server.git
+	branch = main
