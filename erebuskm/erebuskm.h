@@ -16,3 +16,8 @@ extern int g_verbose;
 
 
 u64 nsec_to_clock_t(u64 x);
+
+struct er_client_t {
+	struct list_head node;
+	struct task_struct *client_thread;
+};

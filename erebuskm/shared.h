@@ -7,6 +7,7 @@
 
 #pragma pack(push, 1)
 
+#define ERK_DEVICE_NAME              "erebus"
 
 #define ERK_IOCTL_MAGIC              'e'
 

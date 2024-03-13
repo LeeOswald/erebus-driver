@@ -7,14 +7,14 @@
     </CustomSourceDirectories>
     <AutoProgramSPIFFSPartition>true</AutoProgramSPIFFSPartition>
     <KernelDebugHost>
-      <HostName>Debian 11</HostName>
-      <Transport>ManagedVM</Transport>
-      <UserName>VMWare</UserName>
+      <HostName>192.168.190.134</HostName>
+      <Transport>SSH</Transport>
+      <UserName>ursus</UserName>
     </KernelDebugHost>
     <MainSourceTransferCommand>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
       <RemoteHost>
-        <HostName>Debian 11</HostName>
+        <HostName>192.168.190.134</HostName>
         <Transport>ManagedVM</Transport>
         <UserName>VMWare</UserName>
       </RemoteHost>
@@ -34,6 +34,7 @@
       </FileMasks>
       <TransferNewFilesOnly>true</TransferNewFilesOnly>
       <IncludeSubdirectories>true</IncludeSubdirectories>
+      <SelectedDirectories />
       <DeleteDisappearedFiles>true</DeleteDisappearedFiles>
       <ApplyGlobalExclusionList>true</ApplyGlobalExclusionList>
       <Extension>
