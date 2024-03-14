@@ -81,6 +81,10 @@ private:
         int64_t count;
         int64_t limit;
         RawTask entries[0];
+
+        constexpr explicit RawTaskList(int64_t limit) noexcept
+            : limit(limit)
+        {}
     };
 
     #pragma pack(pop)

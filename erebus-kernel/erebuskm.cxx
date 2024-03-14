@@ -37,6 +37,12 @@ ErebusDriver::ErebusDriver(unsigned devno)
         auto e = errno;
         throw Er::Exception(ER_HERE(), Er::Util::format("Failed to open %s", makeDevicePath(devno).c_str()), Er::ExceptionProps::PosixErrorCode(e), Er::ExceptionProps::DecodedError(Er::Util::posixErrorToString(e)));
     }
+
+    if (::fcntl(m_fd, F_SETFD, FD_CLOEXEC) == -1) 
+    {
+        auto e = errno;
+        throw Er::Exception(ER_HERE(), Er::Util::format("Failed to set FD_CLOEXEC on %s", makeDevicePath(devno).c_str()), Er::ExceptionProps::PosixErrorCode(e), Er::ExceptionProps::DecodedError(Er::Util::posixErrorToString(e)));
+    }
 }
 
 std::string ErebusDriver::makeDevicePath(unsigned devno)
@@ -55,6 +61,7 @@ void ErebusDriver::enumerateRawTasks()
 
     do
     {
+        // allocate IOCTL request
         if (!m_tasks || m_tasks->limit < required) [[likely]] 
         {
             m_tasks.reset(static_cast<RawTaskList*>(::malloc(sizeof(RawTaskList) + required * sizeof(RawTask))));
@@ -62,12 +69,15 @@ void ErebusDriver::enumerateRawTasks()
             {
                 throw Er::Exception(ER_HERE(), "Not enough memory");
             }
+
+            new (m_tasks.get()) RawTaskList(required);
         }
 
+        // repeat until we have enough out buffer room
         auto res = ::ioctl(m_fd, ERK_IOCTL_GET_PROCESS_LIST, m_tasks.get());
-        if (res != 0)
+        if (res != 0) [[unlikely]]
         {
-            if (errno != ENOSPC)
+            if (errno != ENOSPC) [[unlikely]]
             {
                 auto e = errno;
                 throw Er::Exception(ER_HERE(), "ERK_IOCTL_GET_PROCESS_LIST failed", Er::ExceptionProps::PosixErrorCode(e), Er::ExceptionProps::DecodedError(Er::Util::posixErrorToString(e)));

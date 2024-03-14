@@ -2,6 +2,7 @@
 
 #include <erebus/util/exceptionutil.hxx>
 
+#include <iomanip>
 #include <iostream>
 
 
@@ -14,10 +15,7 @@ static int run(int argc, char* argv[])
         auto taskCount = erebus.enumerateTasks(
             [](const Erk::ErebusDriver::Task& t)
             {
-                auto u = double(t.user) / CLOCKS_PER_SEC;
-                auto s = double(t.system) / CLOCKS_PER_SEC;
-
-                std::cout << "%zu u=" << uint64_t(u) << " k=" << uint64_t(s) << "\n";
+                std::cout << t.pid <<  " u=" << t.user << " k=" << t.system << "\n";
                 return true;
             }
         );
