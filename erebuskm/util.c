@@ -3,7 +3,11 @@
 #include <linux/time.h>
 #include <linux/param.h>
 
+#if ERK_VERBOSE
 int g_verbose = 1;
+#else
+int g_verbose = 0;
+#endif
 
 u64 nsec_to_clock_t(u64 x)
 {
@@ -21,13 +25,4 @@ u64 nsec_to_clock_t(u64 x)
 #endif
 }
 
-unsigned cpu_count(void)
-{
-	unsigned count = 0;
-	unsigned cpu = 0;
-	for_each_possible_cpu(cpu) {
-		++count;
-	}
 
-	return count;
-}
