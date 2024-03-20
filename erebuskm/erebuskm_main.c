@@ -3,15 +3,12 @@
 
 #include <linux/cdev.h>
 #include <linux/device.h>
-#include <linux/fs.h>
 #include <linux/init.h>
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/slab.h>
-
-#include <linux/sched/cputime.h>
-#include <linux/sched/signal.h>
 #include <linux/vmalloc.h>
+
 
 
 
@@ -161,90 +158,9 @@ static long erebuskm_ioctl(struct file *filp, unsigned int cmd, unsigned long ar
 	int ret = -ENOTSUPP;
 
 	if (cmd == ERK_IOCTL_GET_PROCESS_LIST) {
-
-		struct erk_process_list *process_list = NULL;
-		u32 memsize = 0;
-		struct erk_process_list request;
-		struct task_struct *process = NULL;
-		struct task_struct *thread = NULL;
-		u64 count = 0;
-
-		/* retrieve args */
-		if (copy_from_user(&request, (void *)arg, sizeof(request))) {
-			ret = -EINVAL;
-			goto ioctl_cleanup;
-		}
-
-		if (request.limit < 0 || request.limit > ERK_MAX_PROCESS_LIST)
-		{
-			er_verbose(ERK "ERK_IOCTL_GET_PROCESS_LIST: invalid limit %llu\n", request.limit);
-			ret = -EINVAL;
-			goto ioctl_cleanup_procinfo;
-		}
-
-		er_verbose(ERK "ERK_IOCTL_GET_PROCESS_LIST limit=%d\n", (int)request.limit);
-
-		memsize = sizeof(struct erk_process_list) + sizeof(struct erk_process_info) * request.limit;
-		process_list = vmalloc(memsize);
-		if (!process_list) {
-			er_verbose(ERK "Not enough memory\n");
-			ret = -ENOMEM;
-			goto ioctl_cleanup;
-		}
-
-		process_list->limit = request.limit;
-
-		/* enumerate tasks */
-		rcu_read_lock();
-		
-		for_each_process_thread(process, thread) {
-
-			u64 utime = 0;
-			u64 stime = 0;
-
-			task_cputime_adjusted(thread, &utime, &stime);
-			process_list->entries[count].pid = thread->pid;
-			process_list->entries[count].utime = nsec_to_clock_t(utime);
-			process_list->entries[count].stime = nsec_to_clock_t(stime);
-
-			++count;
-		}
-
-		rcu_read_unlock();
-
-		/* send results back */
-		process_list->count = count;
-
-		if (count >= process_list->limit) {
-			er_verbose(ERK "ERK_IOCTL_GET_PROCESS_LIST: not enough space (%d avail, %d required)\n", (int)process_list->limit, (int)count);
-
-			/* return expected entry count to client */
-			if (copy_to_user((void *)arg, process_list, sizeof(struct erk_process_list))) {
-				ret = -EINVAL;
-				goto ioctl_cleanup_procinfo;
-			}
-
-			ret = -ENOSPC;
-			goto ioctl_cleanup_procinfo;
-		}
-		else {
-			memsize = sizeof(struct erk_process_list) + sizeof(struct erk_process_info) * count;
-
-			if (copy_to_user((void *)arg, process_list, memsize)) {
-				ret = -EINVAL;
-				goto ioctl_cleanup_procinfo;
-			}
-
-			er_verbose(ERK "Copied %d bytes (%d entries) to client\n", (int)memsize, (int)count);
-		}
-
-		ret = 0;
-ioctl_cleanup_procinfo:
-		vfree((void *)process_list);
-		goto ioctl_cleanup;
+		ret = erebuskm_ioctl_get_processlist(filp, cmd, arg);
 	}
 
-ioctl_cleanup:
 	return ret;
 }
 
