@@ -16,7 +16,7 @@ extern int g_verbose;
 
 #define er_verbose(fmt, ...)	\
 	do {	\
-		if (g_verbose)	\
+		if (unlikely(g_verbose))	\
 			pr_info(fmt, ##__VA_ARGS__);	\
 	} while (0)
 
